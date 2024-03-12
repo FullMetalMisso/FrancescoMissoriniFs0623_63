@@ -23,18 +23,21 @@ namespace Pizzeria.Controllers
         }
 
         // GET: OrdArts/Details/5
-        [Authorize(Roles = "Amministratore, Cliente")]
+        [Authorize(Roles = "Amministratore,Cliente")]
+
         public ActionResult Details(int? orderId)
         {
             if (orderId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var ArtOrderId = db.OrdArt.Where(u => u.Ordine_ID ==orderId).ToList();
-            if (ArtOrderId == null)
+            var ArtOrderId = db.OrdArt.Where(u => u.Ordine_ID == orderId).ToList();
+            Ordini ordini = db.Ordini.Find(orderId);
+            if (ArtOrderId == null || ordini == null)
             {
                 return HttpNotFound();
             }
+            TempData["ordineDetails"] = ordini;
             return View(ArtOrderId);
         }
 
