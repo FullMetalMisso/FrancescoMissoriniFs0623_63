@@ -6,9 +6,12 @@
 
 <h2>Index</h2>
 
+@if (User.IsInRole("Amminitratore"))
+{
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Aggiungi Articolo", "Create")
 </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -43,9 +46,16 @@
             @Html.DisplayFor(modelItem => item.Ingredienti)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Articolo_ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Articolo_ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Articolo_ID })
+            @if (User.IsInRole("Amministratore"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Articolo_ID })
+                @Html.ActionLink("Details", "Details", new { id = item.Articolo_ID })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Articolo_ID })
+            }
+            @if (User.IsInRole("Cliente"))
+            {
+            @Html.ActionLink("Details", "Details", new { id = item.Articolo_ID })
+            }
         </td>
     </tr>
 }

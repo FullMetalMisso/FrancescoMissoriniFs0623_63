@@ -30,12 +30,14 @@ namespace Pizzeria.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ordini ordini = db.Ordini.Find(id);
-            if (ordini == null)
+            var idInt = Convert.ToInt32(id);
+            var order = db.Ordini
+                        .Where(o => o.User_ID == idInt).ToList();
+            if (order == null)
             {
                 return HttpNotFound();
             }
-            return View(ordini);
+            return View(order);
         }
 
         // GET: Ordini/Create

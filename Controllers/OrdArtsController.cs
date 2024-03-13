@@ -22,23 +22,35 @@ namespace Pizzeria.Controllers
             return View(ordArt.ToList());
         }
 
-        // GET: OrdArts/Details/5
-        [Authorize(Roles = "Amministratore,Cliente")]
-
-        public ActionResult Details(int? orderId)
+      // GET: OrdArts/Details/5
+ [Authorize(Roles = "Amministratore,Cliente")]
+        public ActionResult Details(int? id)
         {
-            if (orderId == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var ArtOrderId = db.OrdArt.Where(u => u.Ordine_ID == orderId).ToList();
-            Ordini ordini = db.Ordini.Find(orderId);
-            if (ArtOrderId == null || ordini == null)
+            var ordineWithArticoli = db.OrdArt
+                .Include(o => o.Ordini)
+                .Include(o => o.Ordini.Users)
+                .Include(o => o.Articoli)
+                .Where(o => o.Ordine_ID == id).ToList();
+
+            if (ordineWithArticoli == null)
             {
                 return HttpNotFound();
             }
-            TempData["ordineDetails"] = ordini;
-            return View(ArtOrderId);
+
+            return View(ordineWithArticoli);
+
+            //var ArtOrderId = db.OrdArt.Where(u => u.Ordine_ID == orderId).ToList();
+            //Ordini ordini = db.Ordini.Find(orderId);
+            //if (ArtOrderId == null || ordini == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //TempData["ordineDetails"] = ordini;
+            //return View(ArtOrderId);
         }
 
         // GET: OrdArts/Create
@@ -55,14 +67,24 @@ namespace Pizzeria.Controllers
         // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Amministratore, Cliente")]
+        [Authorize(Roles = "Cliente,Amministratore")]
         public ActionResult Create([Bind(Include = "Articolo_ID,Ordine_ID,Quantita")] OrdArt ordArt)
         {
+            var ControlloOrdine = db.OrdArt.Where(o => o.Articolo_ID == ordArt.Articolo_ID).FirstOrDefault();
+
             if (ModelState.IsValid)
             {
-                db.OrdArt.Add(ordArt);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ControlloOrdine == null)
+                {
+                    db.OrdArt.Add(ordArt);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ControlloOrdine.Quantita += ordArt.Quantita;
+                    db.Entry(ControlloOrdine).State = EntityState.Modified;
+                }
             }
 
             ViewBag.Articolo_ID = new SelectList(db.Articoli, "Articolo_ID", "Nome", ordArt.Articolo_ID);
