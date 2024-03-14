@@ -44,29 +44,46 @@ namespace Pizzeria.Controllers
         [Authorize(Roles = "Cliente, Amministratore")]
         public ActionResult Create()
         {
-            ViewBag.User_ID = new SelectList(db.Users, "User_ID", "Nome");
+            if(User.IsInRole("Cliente"))
+            {
+                ViewBag.User_ID = User.Identity.Name; ;
+            }else if(User.IsInRole("Amministratore"))
+            {
+                   ViewBag.UserID = new SelectList(db.Users, "User_ID", "Nome");
+            }
             return View();
         }
 
         // POST: Ordini/Create
         // Per la protezione da attacchi di overposting, abilitare le proprietà a cui eseguire il binding. 
         // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
-        [Authorize(Roles= "Cliente, Amministratore")]
-        
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Ordine_ID,Indirizzo,Note,CostoCons,User_ID")] Ordini ordini)
+        public ActionResult Create(OrdArt ordArt)
         {
             if (ModelState.IsValid)
             {
-                db.Ordini.Add(ordini);
+                // Salva l'ordine nella tabella Ordini
+                db.Ordini.Add(ordArt.Ordini);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Ottieni l'Ordine_ID appena creato
+                int newOrdineID = ordArt.Ordini.Ordine_ID;
+
+                // Assegna l'Ordine_ID appena creato al record della tabella OrdArt
+                ordArt.Ordine_ID = newOrdineID;
+
+                // Aggiungi il record della tabella OrdArt
+                db.OrdArt.Add(ordArt);
+                db.SaveChanges();
+
+                return RedirectToAction("Details", "OrdArts", new { id = newOrdineID});
             }
 
-            ViewBag.User_ID = new SelectList(db.Users, "User_ID", "Nome", ordini.User_ID);
-            return View(ordini);
+            return View(ordArt);
         }
+
 
         // GET: Ordini/Edit/5
         [Authorize(Roles = "Amministratore")]

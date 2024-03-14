@@ -38,7 +38,7 @@ namespace Pizzeria.Controllers
         }
 
         // GET: Users/Create
-        [Authorize(Roles = "Cliente")]
+       
         public ActionResult Create()
         {
             return View();
@@ -48,7 +48,7 @@ namespace Pizzeria.Controllers
         // Per la protezione da attacchi di overposting, abilitare le proprietà a cui eseguire il binding. 
         // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Cliente")]
+        
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "User_ID,Nome,Cognome,Email,Password,Ruolo")] Users users)
         {

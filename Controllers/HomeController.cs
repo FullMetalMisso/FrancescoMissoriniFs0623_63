@@ -17,7 +17,8 @@ namespace Pizzeria.Controllers
                 return RedirectToAction("Index", "Articoli");
             }
 
-            return RedirectToAction("Index", "articoli");
+            return RedirectToAction("Index", "Articoli");
         }
     }
 }
+          

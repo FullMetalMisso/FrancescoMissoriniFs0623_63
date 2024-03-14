@@ -1,63 +1,133 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewBag.Title - Applicazione ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-***" crossorigin="anonymous" />
+
+
+    <style>
+        /* Navbar */
+        .navbar {
+            background: rgb(15,174,0);
+            background: linear-gradient(86deg, rgba(15,174,0,1) 17%, rgba(255,255,255,1) 53%, rgba(251,36,36,1) 88%);
+        }
+
+        .nav-link {
+            color: #fff !important;
+        }
+
+            .nav-link:hover {
+                color: #ce2b37 !important; /* Rosso */
+            }
+
+        .navbar-brand {
+            color: #fff !important;
+        }
+
+            .navbar-brand:hover {
+                color: #ce2b37 !important; /* Rosso */
+            }
+
+        /* Footer */
+        footer {
+            background-color: #ce2b37; /* Rosso */
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+            footer a {
+                color: #fff;
+            }
+
+                footer a:hover {
+                    color: #009246; /* Verde */
+                }
+    </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark">
         <div class="container">
-            @Html.ActionLink("Nome dell'applicazione", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Attiva/Disattiva spostamento" aria-controls="navbarSupportedContent"
+
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                <img src="~/Stile/Immagini/Logo.png" alt="Logo" class="navbar-logo" width="50" height="50" />
+                Pizzeria al Vesuviano
+            </a>
+            <audio autoplay loop>
+                <source src="~/Stile/test/videoplayback.mp3" type="audio/mpeg">
+                Il tuo browser non supporta l'elemento audio.
+            </audio>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+                <ul class="navbar-nav">
                     @if (User.IsInRole("Amministratore"))
                     {
-                        <li>@Html.ActionLink("Ordini", "Index", "Ordini", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Articoli", "Index", "Articoli", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Ordini", "Index", "Ordini", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Articoli", "Index", "Articoli", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else if (User.IsInRole("Cliente"))
                     {
-                        <li>@Html.ActionLink("Crea Ordine", "Create", "Ordini", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Il tuo ordine", "Details", "Ordini", new { id = User.Identity.Name }, new { @class = "nav-link" })</li>
-
+                        <li class="nav-item">@Html.ActionLink("Crea Ordine", "Create", "Ordini", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Il tuo ordine", "Details", "Ordini", new { id = User.Identity.Name }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("🛒", "Cart", "OrdArts", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                 </ul>
-
-
-                @if (User.IsInRole("Amministratore"))
-                {
-                    <p class="text-bg-warning">🏆🏆AMMINISTRATORE🏆🏆</p>
-                }
-                <ul class="navbar-nav flex-grow-1">
-
-
+                <ul class="navbar-nav ml-auto">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Logout", "Logout", "Auth", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item"><a href="@Url.Action("Logout", "Auth")" class="nav-link btn btn-outline-light">Logout</a></li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Login", "Login", "Auth", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light">Login</a></li>
                     }
                 </ul>
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Applicazione ASP.NET</p>
-        </footer>
+          
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Contatti</h5>
+                            <p>Via Pizzeria, 123</p>
+                            <p>Telefono: 0123 456789</p>
+                            <p>Email: info@pizzeria.com</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Orari di apertura</h5>
+                            <p>Lunedì - Venerdì: 10:00 - 22:00</p>
+                            <p>Sabato - Domenica: 12:00 - 23:00</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Seguici sui social</h5>
+                            <p>
+                                <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="bg-white" />
+                    <div class="text-center">
+                        <p>&copy; @DateTime.Now.Year - Pizzeria del Gusto</p>
+                    </div>
+                </div>
+            </footer>
+       
     </div>
 
     @Scripts.Render("~/bundles/jquery")

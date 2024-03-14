@@ -173,6 +173,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ArtCart.cs" />
     <Compile Include="Models\Articoli.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\OrdArt.cs" />
@@ -232,6 +233,8 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Stile\Immagini\Logo.png" />
+    <Content Include="Stile\test\videoplayback.mp3" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -264,9 +267,10 @@
     <Content Include="Views\OrdArts\Create.cshtml" />
     <Content Include="Views\OrdArts\Delete.cshtml" />
     <Content Include="Views\OrdArts\Details.cshtml" />
-    <Content Include="Views\OrdArts\Edit.cshtml" />
     <Content Include="Views\OrdArts\Index.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
+    <Content Include="Views\OrdArts\AddToCart.cshtml" />
+    <Content Include="Views\OrdArts\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
