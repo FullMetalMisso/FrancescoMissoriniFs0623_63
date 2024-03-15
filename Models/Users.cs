@@ -30,7 +30,9 @@ namespace Pizzeria.Models
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         [StringLength(255)]
+        
         public string Password { get; set; }
 
         [StringLength(50)]

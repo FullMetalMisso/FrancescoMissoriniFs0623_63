@@ -109,26 +109,28 @@ namespace Pizzeria.Controllers
             }
             return View(articoli);
         }
-
         // POST: Articoli/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Amministratore")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Articoli articoli = db.Articoli.Find(id);
-            db.Articoli.Remove(articoli);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            Articoli articolo = db.Articoli.Find(id);
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            // Trova e rimuovi tutte le voci correlate nella tabella OrdArt
+            var ordArtCorrelati = db.OrdArt.Where(oa => oa.Articolo_ID == id);
+            foreach (var ordArt in ordArtCorrelati)
             {
-                db.Dispose();
+                db.OrdArt.Remove(ordArt);
             }
-            base.Dispose(disposing);
+
+            // Rimuovi l'ordine dalla tabella Ordini
+            db.Articoli.Remove(articolo);
+
+            // Salva le modifiche
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

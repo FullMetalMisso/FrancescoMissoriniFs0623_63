@@ -48,7 +48,6 @@ namespace Pizzeria.Controllers
         // Per la protezione da attacchi di overposting, abilitare le proprietà a cui eseguire il binding. 
         // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "User_ID,Nome,Cognome,Email,Password,Ruolo")] Users users)
         {
@@ -61,7 +60,7 @@ namespace Pizzeria.Controllers
                     db.Users.Add(users);
                     db.SaveChanges();
                     TempData["message"] = "Account creato con successo";
-                    return RedirectToAction("Details", new { id = users.User_ID });
+                    return RedirectToAction("Login", "Auth");
                 }
                 else
                 {
